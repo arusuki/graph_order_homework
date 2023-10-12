@@ -31,10 +31,6 @@ func bfs(g Graph) []int {
 		P[i] = new_id
 		new_id += 1
 	}
-
-	if P[0] != 0 {
-		panic("cao")
-	}
 	return P
 }
 
