@@ -101,7 +101,7 @@ func SaveGraph(filename string, g Graph) {
 func CreateSorter(sorter_type string) Sorter {
 	switch sorter_type {
 	case "degree":
-		return DegreeSorter{}
+		return DegreeSorter{5}
 	}
 	panic("Invalid Sorter type.")
 }

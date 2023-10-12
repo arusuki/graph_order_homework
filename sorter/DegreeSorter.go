@@ -5,11 +5,10 @@ import (
 )
 
 type DegreeSorter struct {
+	w int
 }
 
 type void_t struct{}
-
-const w = 5
 
 var void void_t
 
@@ -31,7 +30,7 @@ func s(g *Graph, u, v int) int {
 	return sn + ss
 }
 
-func (DegreeSorter) Sort(old_graph Graph) Graph {
+func (sorter DegreeSorter) Sort(old_graph Graph) Graph {
 
 	new_graph := make(Graph)
 	V_R := make(Graph)
@@ -54,7 +53,7 @@ func (DegreeSorter) Sort(old_graph Graph) Graph {
 		var vmax int
 		kmax := math.MinInt
 		for v := range V_R {
-			j := i - w
+			j := i - sorter.w
 			if j < 0 {
 				j = 0
 			}
