@@ -2,7 +2,8 @@ package main
 
 import (
 	"flag"
-	"temp/sorter"
+
+	"github.com/wojiaowenzhong233/graph_order_homework/sorter"
 )
 
 func main() {
