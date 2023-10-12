@@ -30,12 +30,20 @@ func CreateGraph(filename string) Graph {
 		log.Fatal(err)
 	}
 
+	max_v := 0
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 		var from, to int
 		if _, err := fmt.Sscanf(line, "%d %d", &from, &to); err != nil {
 			log.Fatal(err)
+		}
+		if from > max_v {
+			max_v = from
+		}
+		if to > max_v {
+			max_v = to
 		}
 		if node, ok := nodes[from]; ok {
 			node.neighbours = append(node.neighbours, to)
@@ -46,6 +54,13 @@ func CreateGraph(filename string) Graph {
 			nodes[from] = node
 		}
 		nodes[from].degree += 1
+	}
+
+	for i := 0; i < max_v; i += 1 {
+		if _, ok := nodes[i]; !ok {
+			node := &Node{source: i, degree: 0}
+			nodes[i] = node
+		}
 	}
 
 	return nodes
