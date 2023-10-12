@@ -102,6 +102,8 @@ func CreateSorter(sorter_type string) Sorter {
 	switch sorter_type {
 	case "degree":
 		return DegreeSorter{5}
+	case "visit":
+		return VistOrderSorter{}
 	}
 	panic("Invalid Sorter type.")
 }

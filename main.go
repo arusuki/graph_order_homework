@@ -10,6 +10,7 @@ func main() {
 
 	filepath := flag.String("input", "", "Graph file to sort.")
 	output := flag.String("output", "", "Output file name.")
+	sorter_type := flag.String("sorter", "degree", "Graph ordering algorithm, degree or visit")
 
 	flag.Parse()
 
@@ -18,7 +19,7 @@ func main() {
 		return
 	}
 
-	g_sorter := sorter.CreateSorter("degree")
+	g_sorter := sorter.CreateSorter(*sorter_type)
 	G := sorter.CreateGraph(*filepath)
 
 	sorter.SaveGraph(*output, g_sorter.Sort(G))
