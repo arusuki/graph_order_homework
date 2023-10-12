@@ -15,14 +15,23 @@ type Node struct {
 	neighbours []int
 }
 
-type Graph map[int]*Node
+type Graph struct {
+	num_v int
+	nodes map[int]*Node
+}
 
 type Sorter interface {
 	Sort(node_map Graph) Graph
 }
 
+func MakeGraph() Graph {
+	g := Graph{nodes: make(map[int]*Node)}
+	return g
+}
+
 func CreateGraph(filename string) Graph {
-	nodes := make(Graph)
+	g := MakeGraph()
+	nodes := g.nodes
 
 	file, err := os.Open(filename)
 
@@ -30,12 +39,20 @@ func CreateGraph(filename string) Graph {
 		log.Fatal(err)
 	}
 
+	max_v := 0
+
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
 		var from, to int
 		if _, err := fmt.Sscanf(line, "%d %d", &from, &to); err != nil {
 			log.Fatal(err)
+		}
+		if from > max_v {
+			max_v = from
+		}
+		if to > max_v {
+			max_v = to
 		}
 		if node, ok := nodes[from]; ok {
 			node.neighbours = append(node.neighbours, to)
@@ -48,10 +65,14 @@ func CreateGraph(filename string) Graph {
 		nodes[from].degree += 1
 	}
 
-	return nodes
+	g.num_v = max_v + 1
+	return g
 }
 
-func SaveGraph(filename string, g Graph) {
+func SaveGraph(filename string, graph Graph) {
+
+	g := graph.nodes
+
 	var writer io.Writer
 
 	if filename == "" {

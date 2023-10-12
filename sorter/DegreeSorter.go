@@ -13,14 +13,17 @@ const w = 5
 
 var void void_t
 
-func s(g *Graph, u, v int) int {
+func s(graph *Graph, u, v int) int {
+
+	g := graph.nodes
+
 	v_neighbour := make(map[int]void_t)
-	for _, neighbour := range (*g)[v].neighbours {
+	for _, neighbour := range g[v].neighbours {
 		v_neighbour[neighbour] = void
 	}
 	sn := 0
 	ss := 0
-	for _, neighbour := range (*g)[u].neighbours {
+	for _, neighbour := range g[u].neighbours {
 		if _, ok := v_neighbour[neighbour]; ok {
 			ss += 1
 		}
@@ -33,22 +36,24 @@ func s(g *Graph, u, v int) int {
 
 func (DegreeSorter) Sort(old_graph Graph) Graph {
 
-	new_graph := make(Graph)
-	V_R := make(Graph)
+	new_graph := MakeGraph()
+	V_R_graph := MakeGraph()
 
-	for k, v := range old_graph {
+	V_R := V_R_graph.nodes
+
+	for k, v := range old_graph.nodes {
 		V_R[k] = v
 	}
 
-	n := len(V_R)
+	n := old_graph.num_v
 
 	v := 0
 
-	P := make([]int, 0, len(V_R))
+	P := make(map[int]int)
 
 	delete(V_R, v)
 
-	P = append(P, v)
+	P[0] = v
 
 	for i := 1; i < n; i += 1 {
 		var vmax int
@@ -67,11 +72,11 @@ func (DegreeSorter) Sort(old_graph Graph) Graph {
 				vmax = v
 			}
 		}
-		P = append(P, vmax)
+		P[i] = vmax
 		delete(V_R, vmax)
 	}
 
-	for k, v := range old_graph {
+	for k, v := range old_graph.nodes {
 		node := &Node{
 			source:     P[k],
 			neighbours: make([]int, 0, len(v.neighbours)),
@@ -81,8 +86,8 @@ func (DegreeSorter) Sort(old_graph Graph) Graph {
 			node.neighbours = append(node.neighbours, P[neighbour])
 		}
 
-		new_graph[node.source] = node
+		new_graph.nodes[node.source] = node
 	}
-
+	new_graph.num_v = old_graph.num_v
 	return new_graph
 }
